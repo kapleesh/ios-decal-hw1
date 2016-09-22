@@ -13,7 +13,7 @@ class Words {
     var wordA : String!
     var wordB : String!
     
-    init (wordA: String?, wordB: String?) {
+    init (wordA: String, wordB: String) {
         self.wordA = wordA
         self.wordB = wordB
     }
@@ -22,33 +22,34 @@ class Words {
 //: ### variables the same type? If not, why?
 
 
-//: [EXPLAIN YOUR ANSWER HERE]
+//: [Yes, they are both of type String. The class variables are defined as strings and the constructor also takes Strings or nils and wraps up the variable as an optional. The exclamation point unwraps the optional when evaluating.]
 
 
 //: ## Q2: Variable Types and Function Types
-    func arePalindromes(_ words: [String]) -> Bool {
+    class func arePalindromes(words: [String]) -> Bool {
         let reversedWords = words.map() {String($0.characters.reversed())}
         let numElements = words.count
         
-        for i in 0 ..< numElements {
+        for i in 0...(numElements-1) {
             if words[i] != reversedWords[i] {
                 return false
             }
         }
+        return true
     }
 //: ### Why does the compiler dislike the **for loop**? Fix it.
 //: ### What else is wrong with this function? You may have to refer to (but **not**
 //: ### change) the code at the very bottom. Debug the function.
 
 
-//: [EXPLAIN YOUR ANSWER HERE]
+//: [The compiler dislikes the for loop because the range should be from 0 to (numElements-1), not "0..< numElements". We want to include all this indices and this means starting from 0 and stopping right before the length of the list. We need class at the beginning of the function name because the function arePalindrome is part of the class Words]
 
 
 //: ## Q3: More Functions and Object Initialization
-    class func isAnagram() -> Bool {
-        var countLetters : [Character : Int] //Line X
-        var lenA = self.wordA.characters.count
-        var lenB = self.wordB.characters.count
+    func isAnagram() -> Bool {
+        var countLetters : [Character : Int] = [:]//Line X
+        let lenA = self.wordA.characters.count
+        let lenB = self.wordB.characters.count
         
         if lenA != lenB {
             return false
@@ -75,13 +76,13 @@ class Words {
             }
         }
         
-        for (letter, count) in countLetters {
+        for (_, count) in countLetters {
             if count != 0 {
                 return false
             }
         }
         
-        return nil
+        return true
     }
 //: ### What is the problem with declaring **countLetters** as we do in **Line X**,
 //: ### and then using it in **Line Y**? Fix it (by only changing **Line X**).
@@ -89,7 +90,7 @@ class Words {
 //: ### change) the code at the very bottom. Debug the function.
 
 
-//: [EXPLAIN YOUR ANSWER HERE]
+//: [The problem in Line X is that we have not initialized the dictionary. I added the [:] to the end in order to do so. Also at the end of function, it should return true, not nil, because a boolean needs to be returned. The function should not be a class function because isAnagram needs to be called on an object of the words class. Xcode also recommended that I change var lenA and var lenB to let lenA and let lenB because the instances do not change. Also it recommended that I remove letter from the laster for loop because it is unused]
     
     
 }
@@ -102,8 +103,8 @@ class Words {
 
 
 //: **DO NOT** touch any code below this point.
-Words.arePalindromes(["hih", "racecar", "mom", "wow"])
-Words.arePalindromes(["gene", "shawn", "hello"])
+Words.arePalindromes(words: ["hih", "racecar", "mom", "wow"])
+Words.arePalindromes(words: ["gene", "shawn", "hello"])
 var wordsObj = Words.init(wordA: "anagram", wordB: "managra")
 wordsObj.isAnagram()
 wordsObj.wordA = "hello"
